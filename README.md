@@ -1,1 +1,1 @@
-# Grid_project
+Unity test task - letter grid generating app.
