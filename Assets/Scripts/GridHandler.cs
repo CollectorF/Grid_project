@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -18,17 +17,14 @@ public class GridHandler : MonoBehaviour
     private int columns;
     private GameObject scaledPrefab;
 
-    private void Start()
+    internal void SetupGrid(int columns, int rows)
     {
-        rows = 20;
-        columns = 4;
-
-        SetPrefabSize();
-        GenerateGrid();
-        InstantiateGrid();
+        SetPrefabSize(columns, rows);
+        GenerateGrid(columns, rows);
+        InstantiateGrid(columns, rows);
     }
 
-    private void GenerateGrid()
+    private void GenerateGrid(int columns, int rows)
     {
         grid = new Node[columns, rows];
         for (int y = 0; y < rows; y++)
@@ -40,13 +36,13 @@ public class GridHandler : MonoBehaviour
         }
     }
 
-    private void InstantiateGrid()
+    private void InstantiateGrid(int columns, int rows)
     {
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < columns; x++)
             {
-                GameObject currentNode = Instantiate(nodePrefab, gameGrid);
+                GameObject currentNode = Instantiate(scaledPrefab, gameGrid);
                 RectTransform rect = currentNode.GetComponent<RectTransform>();
                 rect.anchoredPosition = new 
                     (
@@ -59,10 +55,10 @@ public class GridHandler : MonoBehaviour
         }
     }
 
-    private void SetPrefabSize()
+    private void SetPrefabSize(int columns, int rows)
     {
         scaledPrefab = nodePrefab;
-        RectTransform prefabTransform = nodePrefab.GetComponent<RectTransform>();
+        RectTransform prefabTransform = scaledPrefab.GetComponent<RectTransform>();
         float dimention;
         if (columns >= rows)
         {
