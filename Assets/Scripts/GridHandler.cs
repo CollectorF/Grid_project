@@ -20,10 +20,10 @@ public class GridHandler : MonoBehaviour
 
     private void Start()
     {
-        rows = 4;
-        columns = 12;
+        rows = 20;
+        columns = 4;
 
-        //SetPrefabSize();
+        SetPrefabSize();
         GenerateGrid();
         InstantiateGrid();
     }
@@ -59,24 +59,23 @@ public class GridHandler : MonoBehaviour
         }
     }
 
-    //private void SetPrefabSize()
-    //{
-    //    scaledPrefab = nodePrefab;
-    //    RectTransform prefabTransform = nodePrefab.GetComponent<RectTransform>();
-    //    float dimention;
-    //    if (columns >= rows)
-    //    {
-    //        dimention = gameGrid.rect.width / columns;
-    //    }
-    //    else
-    //    {
-    //        dimention = gameGrid.rect.height / rows;
-    //    }
-    //    prefabTransform.sizeDelta = new Vector2(dimention, dimention);
-    //    transform.localPosition = new Vector2(dimention / 2, -dimention / 2);
-    //}
+    private void SetPrefabSize()
+    {
+        scaledPrefab = nodePrefab;
+        RectTransform prefabTransform = nodePrefab.GetComponent<RectTransform>();
+        float dimention;
+        if (columns >= rows)
+        {
+            dimention = gameGrid.rect.width / columns;
+        }
+        else
+        {
+            dimention = gameGrid.rect.height / rows;
+        }
+        prefabTransform.sizeDelta = new Vector2(dimention, dimention);
+    }
 
-    
+
     public char GetRandomChar()
     {
         System.Random random = new System.Random();
