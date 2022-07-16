@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private int rowsLimit = 15;
     [SerializeField]
     private int columnsLimit = 10;
+    [SerializeField]
+    private float nodesMoveDuration = 2;
 
     private string inputRows;
     private string inputColumns;
@@ -23,10 +25,12 @@ public class GameManager : MonoBehaviour
 
     private Node[,] currentGrid;
     private List<GameObject> gridNodes = new List<GameObject>();
+    private Coroutine inputDisable;
 
     private void Awake()
     {
         gridGenerator.OnGridGenerated += SaveGrid;
+        inputHandler.SetButtonsState(true);
     }
 
     private void SaveGrid(Node[,] grid, List<GameObject> nodes)
@@ -43,6 +47,11 @@ public class GameManager : MonoBehaviour
     public void OnShuffleClick()
     {
         ShuffleGrid();
+        if (inputDisable == null)
+        {
+            inputDisable = StartCoroutine(DisableInputCoroutine(nodesMoveDuration));
+        }
+        
     }
 
     private void SetGrid()
@@ -58,7 +67,7 @@ public class GameManager : MonoBehaviour
 
     private void ShuffleGrid()
     {
-        gridShuffler.ShuffleGrid(currentGrid, gridNodes, columns, rows);
+        gridShuffler.ShuffleGrid(currentGrid, gridNodes, columns, rows, nodesMoveDuration);
     }
 
     private bool CheckGridDimentions()
@@ -78,5 +87,13 @@ public class GameManager : MonoBehaviour
         {
             return false;
         }
+    }
+
+    private IEnumerator DisableInputCoroutine(float duration)
+    {
+        inputHandler.SetButtonsState(false);
+        yield return new WaitForSeconds(duration);
+        inputHandler.SetButtonsState(true);
+        inputDisable = null;
     }
 }

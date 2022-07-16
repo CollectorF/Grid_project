@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class GridShuffler : MonoBehaviour
 {
-    [SerializeField]
-    private float moveDuration = 2;
-
     private Node[,] currentGrid;
     private Node[,] shuffledGrid;
 
-    internal void ShuffleGrid(Node[,] grid, List<GameObject> nodes, int columns, int rows)
+    internal void ShuffleGrid(Node[,] grid, List<GameObject> nodes, int columns, int rows, float duration)
     {
         currentGrid = grid;
         shuffledGrid = currentGrid;
         ShuffleArray(shuffledGrid);
 
         GameObject currentObject = null;
+        RectTransform rect = null;
         Node newNode = null;
         foreach (var currentNode in currentGrid)
         {
-            Coroutine moveCoroutine = null;
             for (int y = 0; y < rows; y++)
             {
                 for (int x = 0; x < columns; x++)
@@ -29,14 +26,12 @@ public class GridShuffler : MonoBehaviour
                     {
                         newNode = shuffledGrid[x, y];
                         currentObject = nodes.Find(item => item.name == $"{ x },{ y }");
+                        rect = currentObject.GetComponent<RectTransform>();
                         break;
                     }
                 }
             }
-            if (moveCoroutine == null)
-            {
-                moveCoroutine = StartCoroutine(MoveNode(currentObject, currentNode.LocalPos, newNode.LocalPos));
-            }
+            StartCoroutine(MoveNode(rect, newNode.LocalPos, duration));
         }
     }
 
@@ -60,16 +55,16 @@ public class GridShuffler : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveNode(GameObject obj, Vector2 startPos, Vector2 endPos)
+    private IEnumerator MoveNode(RectTransform rect, Vector2 endPos, float moveDuration)
     {
+        Vector2 startPos = rect.localPosition;
         float timeElapsed = 0;
         while (timeElapsed < moveDuration)
         {
-            obj.transform.localPosition = Vector2.Lerp(startPos, endPos, timeElapsed / moveDuration);
+            rect.localPosition = Vector2.Lerp(startPos, endPos, timeElapsed / moveDuration);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        obj.transform.localPosition = endPos;
-        //moveCoroutine = null;
+        rect.localPosition = endPos;
     }
 }

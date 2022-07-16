@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class InputHandler : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class InputHandler : MonoBehaviour
     private TMP_InputField rowsInput;
     [SerializeField]
     private TMP_InputField columnsInput;
+    [SerializeField]
+    private Button generateButton;
+    [SerializeField]
+    private Button mixButton;
 
     public delegate void InvalidInputEvent();
     public event InvalidInputEvent OnInvalidInput;
@@ -29,5 +34,14 @@ public class InputHandler : MonoBehaviour
             OnInvalidInput?.Invoke();
             return 0;
         }
+    }
+
+    internal void SetButtonsState(bool state)
+    {
+        rowsInput.interactable = state;
+        columnsInput.interactable = state;
+        generateButton.interactable = state;
+        mixButton.interactable = state;
+
     }
 }
