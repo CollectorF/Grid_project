@@ -42,6 +42,5 @@ public class InputHandler : MonoBehaviour
         columnsInput.interactable = state;
         generateButton.interactable = state;
         mixButton.interactable = state;
-
     }
 }

@@ -11,11 +11,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GridShuffler gridShuffler;
     [SerializeField]
+    private PopupHandler popupHandler;
+    [SerializeField]
     private int rowsLimit = 15;
     [SerializeField]
     private int columnsLimit = 10;
     [SerializeField]
     private float nodesMoveDuration = 2;
+
 
     private string inputRows;
     private string inputColumns;
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         gridGenerator.OnGridGenerated += SaveGrid;
+        inputHandler.OnInvalidInput += DisplayPopupOnInvalidInput;
         inputHandler.SetButtonsState(true);
     }
 
@@ -51,7 +55,6 @@ public class GameManager : MonoBehaviour
         {
             inputDisable = StartCoroutine(DisableInputCoroutine(nodesMoveDuration));
         }
-        
     }
 
     private void SetGrid()
@@ -74,19 +77,23 @@ public class GameManager : MonoBehaviour
     {
         if (rows > 0 && rows <= rowsLimit)
         {
-            if (columns > 0 && columns <= columnsLimit)
-            {
-                return true;
-            }
+            if (columns > 0 && columns <= columnsLimit) return true;
             else
             {
+                DisplayPopupOnInvalidInput();
                 return false;
             }
         }
         else
         {
+            DisplayPopupOnInvalidInput();
             return false;
         }
+    }
+
+    private void DisplayPopupOnInvalidInput()
+    {
+        popupHandler.DisplayPopup(rowsLimit, columnsLimit);
     }
 
     private IEnumerator DisableInputCoroutine(float duration)
