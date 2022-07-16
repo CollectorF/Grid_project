@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class GridHandler : MonoBehaviour
+public class GridGenerator : MonoBehaviour
 {
     [SerializeField]
     private string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -12,26 +12,32 @@ public class GridHandler : MonoBehaviour
     [SerializeField]
     private RectTransform gameGrid;
 
-    private Node[,] grid;
-    private int rows;
-    private int columns;
+    private Node[,] initialGrid;
     private GameObject scaledPrefab;
+    private List<GameObject> gridNodes = new List<GameObject>();
+
+    public delegate void GridGeneratedEvent(Node[,] grid, List<GameObject> nodes);
+    public event GridGeneratedEvent OnGridGenerated;
+
 
     internal void SetupGrid(int columns, int rows)
     {
+        DestroyGrid();
         SetPrefabSize(columns, rows);
         GenerateGrid(columns, rows);
         InstantiateGrid(columns, rows);
+        OnGridGenerated?.Invoke(initialGrid, gridNodes);
     }
+
 
     private void GenerateGrid(int columns, int rows)
     {
-        grid = new Node[columns, rows];
+        initialGrid = new Node[columns, rows];
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < columns; x++)
             {
-                grid[x, y] = new Node(GetRandomChar(), new Point(x, y));
+                initialGrid[x, y] = new Node(GetRandomChar(), new Point(x, y));
             }
         }
     }
@@ -43,6 +49,8 @@ public class GridHandler : MonoBehaviour
             for (int x = 0; x < columns; x++)
             {
                 GameObject currentNode = Instantiate(scaledPrefab, gameGrid);
+                currentNode.name = $"{ x },{ y }";
+                gridNodes.Add(currentNode);
                 RectTransform rect = currentNode.GetComponent<RectTransform>();
                 rect.anchoredPosition = new 
                     (
@@ -50,10 +58,25 @@ public class GridHandler : MonoBehaviour
                     -rect.sizeDelta.y / 2 - (rect.sizeDelta.y * y)
                     );
                 TextMeshProUGUI textField = currentNode.GetComponentInChildren<TextMeshProUGUI>();
-                textField.text = grid[x, y].Value.ToString();
+                textField.text = initialGrid[x, y].Value.ToString();
+                initialGrid[x, y].LocalPos = rect.localPosition;
             }
         }
     }
+
+
+    private void DestroyGrid()
+    {
+        if (gridNodes.Count != 0)
+        {
+            foreach (var item in gridNodes)
+            {
+                Destroy(item.gameObject);
+            }
+            gridNodes.Clear();
+        }
+    }
+
 
     private void SetPrefabSize(int columns, int rows)
     {

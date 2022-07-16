@@ -10,17 +10,24 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     private TMP_InputField columnsInput;
 
-    private string userInputRows;
-    private string userInputColumns;
+    public delegate void InvalidInputEvent();
+    public event InvalidInputEvent OnInvalidInput;
 
-    public delegate void InputEvent(string str1, string str2);
-
-    public event InputEvent OnInput;
-
-    public void GetUserInput()
+    internal void GetInput(out string userInputRows, out string userInputColumns)
     {
         userInputRows = rowsInput.text;
         userInputColumns = columnsInput.text;
-        OnInput?.Invoke(userInputRows, userInputColumns);
+    }
+
+    internal int ParseInput(string input)
+    {
+        bool result = int.TryParse(input, out int number);
+        if (result)
+            return number;
+        else
+        {
+            OnInvalidInput?.Invoke();
+            return 0;
+        }
     }
 }

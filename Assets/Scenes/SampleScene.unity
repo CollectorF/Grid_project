@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 306202965}
   - component: {fileID: 306202966}
   - component: {fileID: 306202967}
+  - component: {fileID: 306202968}
   m_Layer: 5
   m_Name: GridPanel
   m_TagString: Untagged
@@ -184,6 +185,19 @@ MonoBehaviour:
   chars: ABCDEFGHIJKLMNOPQRSTUVWXYZ
   nodePrefab: {fileID: 2034072842773315050, guid: 06925fb0c8c558441835de49e1929e9f, type: 3}
   gameGrid: {fileID: 306202965}
+--- !u!114 &306202968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306202964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74b7fa1cc4f6cb748b1033399dc79ab0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDuration: 2
 --- !u!1 &434142037
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,7 +411,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
   m_fontSizeMax: 75
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -637,7 +651,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
   m_fontSizeMax: 75
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -765,9 +779,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 784339133}
-        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
-        m_MethodName: GetUserInput
+      - m_Target: {fileID: 1343353482}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OnGenerateClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1495,7 +1509,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputHandler: {fileID: 784339133}
-  gridHandler: {fileID: 306202967}
+  gridGenerator: {fileID: 306202967}
+  gridShuffler: {fileID: 306202968}
+  rowsLimit: 15
+  columnsLimit: 10
 --- !u!1 &1352752328
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,7 +2227,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2042698758}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1343353482}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OnShuffleClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2042698758
 MonoBehaviour:
   m_ObjectHideFlags: 0
