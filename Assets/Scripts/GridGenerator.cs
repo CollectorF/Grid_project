@@ -52,11 +52,32 @@ public class GridGenerator : MonoBehaviour
                 currentNode.name = $"{ x },{ y }";
                 gridNodes.Add(currentNode);
                 RectTransform rect = currentNode.GetComponent<RectTransform>();
-                rect.anchoredPosition = new 
-                    (
-                    rect.sizeDelta.x / 2 + (rect.sizeDelta.x * x),
-                    -rect.sizeDelta.y / 2 - (rect.sizeDelta.y * y)
-                    );
+                if (rect.sizeDelta.x * columns < gameGrid.rect.width)
+                {
+                    float offset = (gameGrid.rect.width - rect.sizeDelta.x * columns) / 2;
+                    rect.anchoredPosition = new
+                        (
+                            rect.sizeDelta.x / 2 + (rect.sizeDelta.x * x) + offset,
+                            -rect.sizeDelta.y / 2 - (rect.sizeDelta.y * y)
+                        );
+                }
+                else if (rect.sizeDelta.y * rows < gameGrid.rect.height)
+                {
+                    float offset = (gameGrid.rect.height - rect.sizeDelta.y * rows) / 2;
+                    rect.anchoredPosition = new
+                        (
+                            rect.sizeDelta.x / 2 + (rect.sizeDelta.x * x),
+                            -rect.sizeDelta.y / 2 - (rect.sizeDelta.y * y) - offset
+                        );
+                }
+                else
+                {
+                    rect.anchoredPosition = new
+                        (
+                            rect.sizeDelta.x / 2 + (rect.sizeDelta.x * x),
+                            -rect.sizeDelta.y / 2 - (rect.sizeDelta.y * y)
+                        );
+                }
                 TextMeshProUGUI textField = currentNode.GetComponentInChildren<TextMeshProUGUI>();
                 textField.text = initialGrid[x, y].Value.ToString();
                 initialGrid[x, y].LocalPos = rect.localPosition;
@@ -83,7 +104,7 @@ public class GridGenerator : MonoBehaviour
         scaledPrefab = nodePrefab;
         RectTransform prefabTransform = scaledPrefab.GetComponent<RectTransform>();
         float dimention;
-        if (columns >= rows)
+        if (columns >= rows * 0.6f)
         {
             dimention = gameGrid.rect.width / columns;
         }
