@@ -1,4 +1,4 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -20,7 +20,7 @@ public class PopupHandler : MonoBehaviour
     internal void DisplayPopup(int rows, int columns)
     {
         gameObject.SetActive(true);
-        textField.text = $"Некорректный ввод!\nТолько цифры, не более {rows} рядов и {columns} столбцов";
+        textField.text = $"РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ!\nРўРѕР»СЊРєРѕ С†РёС„СЂС‹, РЅРµ Р±РѕР»РµРµ {rows} СЂСЏРґРѕРІ Рё {columns} СЃС‚РѕР»Р±С†РѕРІ";
         if (displayPopupCoroutine == null)
         {
             displayPopupCoroutine = StartCoroutine(PopupCoroutine(displayDuration));
